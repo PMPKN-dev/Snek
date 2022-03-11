@@ -10,6 +10,7 @@ public class Board {
     private int amountOfFields;
     Square[][] squares;
 
+    //using the Squares class, this creates a board with the predetermined colors.
     public Board(int amountOfFields,int boardSize){
         //this.boardSize = amountOfFields*10;
         this.amountOfFields = amountOfFields;

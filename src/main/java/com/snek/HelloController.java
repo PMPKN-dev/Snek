@@ -42,6 +42,7 @@ public class HelloController {
     @FXML
     Button button = new Button();
 
+    //draws the background board
     @FXML
     public void drawBoard(){
 
@@ -62,6 +63,7 @@ public class HelloController {
 
     }
 
+    //loads in the snake/rectangle and puts it in the center
     public void spawnSnake(){
         snek = new Snek(20);
 
@@ -72,6 +74,7 @@ public class HelloController {
 
     private void drawMisc(){
 
+        //will move the snake in the interval movementFrequency by reading current pos and adding/removing the moveX and moveY
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -81,6 +84,7 @@ public class HelloController {
             }
         },0,movementFrequency);
 
+        //creates the button. the button does nothing
         button.setLayoutX(100);
         button.setLayoutY(450);
         button.setText("Do Something!");

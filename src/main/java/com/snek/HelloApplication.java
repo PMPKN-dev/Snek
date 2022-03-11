@@ -19,13 +19,6 @@ public class HelloApplication extends Application {
         stage.setScene(scene);
         stage.show();
 
-        Button button = new Button();
-        button.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-
-            }
-        });
     }
 
     public static void main(String[] args) {
