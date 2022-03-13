@@ -1,9 +1,13 @@
 package com.snek.game;
 
 public class Main {
-    private static final int amountOfFields = 21;
+    public Main() {
+    }
 
-    static Board board = new Board(amountOfFields,400);
+    public static final int amountOfFields = 21;
+    public static final int boardSize = 400;
+
+    static Board board = new Board(amountOfFields,boardSize);
     public static Board getBoard(){return board;}
 
 

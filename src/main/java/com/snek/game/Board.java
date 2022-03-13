@@ -1,17 +1,17 @@
 package com.snek.game;
 
 
-import com.snek.HelloController;
 import javafx.scene.paint.Color;
 
 public class Board {
+
 
     private int boardSize;
     private int amountOfFields;
     Square[][] squares;
 
-    //using the Squares class, this creates a board with the predetermined colors.
-    public Board(int amountOfFields,int boardSize){
+
+    public Board(int amountOfFields, int boardSize){
         //this.boardSize = amountOfFields*10;
         this.amountOfFields = amountOfFields;
         this.boardSize= boardSize;
@@ -22,14 +22,18 @@ public class Board {
         boolean change=true;
 
         for(int i = 0; i< this.amountOfFields ; i++){
+
             for(int j = 0;j<this.amountOfFields; j++){
+
                 x = j * this.boardSize /this.amountOfFields;
                 y = i * this.boardSize /this.amountOfFields;
 
                 if(j%2==0&&i%2==0||j%2==1&&i%2==1){
                     squares[i][j] = new Square(x,y,this.boardSize/getAmountOfFields(), Color.BEIGE);
+
                 } else {
                     squares[i][j] = new Square(x,y,this.boardSize/getAmountOfFields(), Color.LIGHTGRAY);
+
                 }
             }
         }

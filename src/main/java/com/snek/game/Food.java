@@ -2,27 +2,22 @@ package com.snek.game;
 
 import javafx.scene.shape.Rectangle;
 
-public class Snek {
-
+public class Food {
     int size;
-
     Rectangle rect = new Rectangle();
 
-    public Snek(int size){
+    public Food(int size){
         this.size =size;
-
     }
-    public Rectangle getSnake(){
+    public Rectangle getFood(){
         rect.setWidth(size);
         rect.setHeight(size);
         return rect;
     }
-
-    public void moveSnake(int X,int Y){
+    public void moveFood(int X,int Y){
         rect.setX(X);
         rect.setY(Y);
     }
-
     public int[] getPos(){
         int[] pos = new int[2];
         pos[0]= (int) rect.getX();
