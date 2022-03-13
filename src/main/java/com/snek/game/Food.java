@@ -4,26 +4,27 @@ import javafx.scene.shape.Rectangle;
 
 public class Food {
     int size;
-    Rectangle rect = new Rectangle();
+    long time;
+    int[] pos= new int[2];
+    Rectangle rectangle = new Rectangle();
 
-    public Food(int size){
-        this.size =size;
+    public Food (int size){
+        time = System.currentTimeMillis();
+        this.size= size;
     }
-    public Rectangle getFood(){
-        rect.setWidth(size);
-        rect.setHeight(size);
-        return rect;
+    public Rectangle getFood (){
+        rectangle.setWidth(size);
+        rectangle.setHeight(size);
+        return rectangle;
     }
-    public void moveFood(int X,int Y){
-        rect.setX(X);
-        rect.setY(Y);
+
+    public long getTime(){
+        return time;
     }
+
     public int[] getPos(){
-        int[] pos = new int[2];
-        pos[0]= (int) rect.getX();
-        pos[1]= (int) rect.getY();
+        pos[0]= (int) rectangle.getX();
+        pos[1]= (int) rectangle.getY();
         return pos;
     }
-
-
 }
