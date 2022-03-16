@@ -15,6 +15,8 @@ import javafx.scene.text.Text;
 
 import java.util.*;
 
+import static java.lang.Integer.parseInt;
+
 public class HelloController  {
 
     @FXML
@@ -31,10 +33,9 @@ public class HelloController  {
     Tail tail;
     int moveX = 0;
     int moveY = 0;
-    int movementFrequency = 500;
-    int cooldown = 0;
-    Food food = new Food(Main.boardSize/Main.amountOfFields);
-
+    int movementFrequency = 100;
+    int justanotherincrementingvalue = 0;
+    Food food = new Food((Main.boardSize-1)/Main.amountOfFields);
     String heading = "";
 
     void setTxScore(int no){
@@ -42,12 +43,7 @@ public class HelloController  {
     }
 
     @FXML
-    Button button = new Button();
-
-    @FXML
     public void drawBoard(){
-
-
         Board board = Main.getBoard();
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.setFill(Color.GRAY);
@@ -70,42 +66,27 @@ public class HelloController  {
     }
 
     public void spawnTail(){
-        //currently i use the food rectangle as a ghetto tail just to test, the random numbers below randomize its spawnpoint on the map, although there is no check yet whether it spawns on the snake.
-        //the sout is just to test if the random numbers are within range, they still need to be +1 to be perfect.
         tail = new Tail((Main.boardSize-1)/Main.amountOfFields);
         Rectangle asd = tail.getTail();
         anchorPane.getChildren().add(asd);
-        Random rn = new Random();
-        int randomX = rn.nextInt(Main.amountOfFields);
-        int randomY = rn.nextInt(Main.amountOfFields);
-        System.out.println(randomX+" and "+randomY);
-        int randomspawn = rn.nextInt(10);
-    }
-
-    public void removeFood(){
-        anchorPane.getChildren().remove(food.getFood());
     }
 
     public void addFood(){
-        food = new Food(Main.boardSize/Main.amountOfFields);
-        int sizeMultiplier = Main.boardSize/Main.amountOfFields;
+        food = new Food((Main.boardSize-1)/Main.amountOfFields);
+        anchorPane.getChildren().add(food.getFood());
+        int sizeMultiplier = (Main.boardSize-1)/Main.amountOfFields;
         food.getFood().setX(random.nextInt(Main.amountOfFields)*sizeMultiplier);
         food.getFood().setY(random.nextInt(Main.amountOfFields)*sizeMultiplier);
-        anchorPane.getChildren().add(food.getFood());
     }
-
-    public void foodLoop(){
-        int[] snekA = snek.getPos();
-        int[] foodA = food.getPos();
-        if(!anchorPane.getChildren().contains(food.getFood())) {
-            addFood();
-        } else if ((System.currentTimeMillis()- food.getTime())>20000){
-            removeFood();
-            addFood();
-        } else if(snekA[0]==foodA[0]&&snekA[1]==foodA[1]){
-            removeFood();
-            setTxScore(Integer.parseInt(txScore.getText())+1);
-            addFood();
+    public void addTail(){
+        int sizeMultiplier = (Main.boardSize-1)/Main.amountOfFields;
+        if(parseInt(txScore.getText())>justanotherincrementingvalue) {
+            tail = new Tail((Main.boardSize - 1) / Main.amountOfFields);
+            Rectangle test = tail.getTail();
+            anchorPane.getChildren().add(test);
+            test.setX(sizeMultiplier);
+            test.setY(sizeMultiplier);
+            justanotherincrementingvalue++;
         }
     }
 
@@ -115,48 +96,63 @@ public class HelloController  {
             @Override
             public void run() {
                 int[] snekPos = snek.getPos();
-                //right to left
-                if(snekPos[0]>Main.boardSize-(moveX*2) & Objects.equals(heading, "right")) {
+                int[] foodA = food.getPos();
+                long timerman = 0;
+                timerman++;
+                int sizeMultiplier = (Main.boardSize-1)/Main.amountOfFields;
+                if(timerman>20){
+                    timerman = 0;
+                    food.getFood().setX(random.nextInt(Main.amountOfFields)*sizeMultiplier);
+                    food.getFood().setY(random.nextInt(Main.amountOfFields)*sizeMultiplier);
+                    System.out.println(food.getFood().getX());
+                    System.out.println(food.getFood().getY());
+                } else if(snekPos[0]==foodA[0]&&snekPos[1]==foodA[1]){
+                    food.getFood().setX(random.nextInt(Main.amountOfFields)*sizeMultiplier);
+                    food.getFood().setY(random.nextInt(Main.amountOfFields)*sizeMultiplier);
+                    System.out.println(food.getFood().getX());
+                    System.out.println(food.getFood().getY());
+                    setTxScore(parseInt(txScore.getText())+1);
+                }
+                     //right to left
+                if(snekPos[0]>(Main.boardSize-1)-(moveX*2) & heading=="right") {
                     snek.moveSnake(0, snekPos[1] + moveY);
+
                     //left to right
-                }else if (snekPos[0]==0 & Objects.equals(heading, "left")){
-                    snek.moveSnake(Main.boardSize+moveX, snekPos[1] + moveY);
+                }else if (snekPos[0]==0 & heading=="left"){
+                    snek.moveSnake((Main.boardSize-1)+moveX, snekPos[1] + moveY);
+
                     //down to up
-                }else if (snekPos[1]>Main.boardSize-(moveY*2) & heading=="down") {
+                }else if (snekPos[1]>(Main.boardSize-1)-(moveY*2) & heading=="down") {
                     snek.moveSnake(snekPos[0] + moveX, 0);
+
                     //up to down
                 }else if(snekPos[1]==0 & heading=="up"){
-                    snek.moveSnake(snekPos[0]+moveX, Main.boardSize+moveY);
+                    snek.moveSnake(snekPos[0]+moveX, (Main.boardSize-1)+moveY);
+
                     //normal movement
                 }else snek.moveSnake(snekPos[0] + moveX, snekPos[1] + moveY);
-                tail.moveTail(snekPos[0],snekPos[1]);
-
                 
+                for (int i = 0; i <(parseInt(txScore.getText())) ; i++) {
+                    tail.moveTail(snekPos[0],snekPos[1]);
+                    int[] cursed = tail.getPos();
+                    tail.moveTail(cursed[0],cursed[1]);
+                }
             }
         },0,movementFrequency);
-
-        button.setLayoutX(100);
-        button.setLayoutY(450);
-        button.setText("Do Something!");
-        anchorPane.getChildren().add(button);
     }
-
 
     @FXML
     private void initialize(){
         spawnSnake();
+        addFood();
         spawnTail();
         drawBoard();
         Gameloop();
-
-
-
     }
 
     @FXML
     public void handleOnKeyPressed(KeyEvent e) {
-        foodLoop();
-        //java: an enum switch case label must be the unqualified name of an enumeration constant | so cant use switch cases
+        addTail();
         if(e.getCode().equals(KeyCode.W)){
             moveX = 0;
             moveY = -(Main.boardSize-1)/Main.amountOfFields;
@@ -176,16 +172,3 @@ public class HelloController  {
         }
     }
 }
-
-/*
-TODO stuff
-if statement that with a random thing between 1-9 creates a 22% chance that it spawns a food rectangle, the cooldown is so it cant keep spawning food each game tick
-* if(feeler>=8 & cooldown>10){
-                    testman.setY(38);
-                    testman.setX(19);
-                    cooldown = 0;
-                }
-                cooldown++;
-                * stuff for spawning food*/
-
-//food.moveFood(randomX*((Main.boardSize-1)/Main.amountOfFields), randomY*((Main.boardSize-1)/Main.amountOfFields));
